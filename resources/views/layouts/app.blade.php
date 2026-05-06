@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureApp — @yield('title', 'Dashboard')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <nav class="px-8 py-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+        <span class="text-xl font-bold text-white">🛡️ InsureApp</span>
+        <div class="flex items-center gap-4">
+            <span class="text-slate-300 text-sm">
+                {{ auth()->user()->name }}
+                <span class="ml-2 text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-full">
+                    {{ auth()->user()->roles->first()?->name ?? 'user' }}
+                </span>
+            </span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="text-sm text-slate-400 hover:text-red-400 transition">
+                    Log Out
+                </button>
+            </form>
         </div>
-    </body>
+    </nav>
+
+    <main class="flex-1 p-8">
+        @yield('content')
+    </main>
+
+    <footer class="px-8 py-4 border-t border-slate-700 text-center text-slate-600 text-xs">
+        © {{ date('Y') }} InsureApp
+    </footer>
+
+</body>
 </html>

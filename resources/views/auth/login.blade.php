@@ -1,47 +1,73 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureApp — Log In</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-slate-900 min-h-screen flex">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    {{-- Left Panel --}}
+    <div class="hidden md:flex w-1/2 bg-indigo-700 flex-col justify-center items-center p-12">
+        <span class="text-5xl mb-6">🛡️</span>
+        <h1 class="text-4xl font-extrabold text-white mb-4">InsureApp</h1>
+        <p class="text-indigo-200 text-center text-lg max-w-sm">
+            Your trusted platform for managing insurance policies and offers.
+        </p>
+    </div>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    {{-- Right Panel - Form --}}
+    <div class="w-full md:w-1/2 flex flex-col justify-center items-center px-8 py-12">
+        <div class="w-full max-w-md">
+            <h2 class="text-3xl font-bold text-white mb-2">Welcome back</h2>
+            <p class="text-slate-400 mb-8">Log in to your account to continue.</p>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            @if ($errors->any())
+                <div class="bg-red-500/10 border border-red-500 text-red-400 rounded-lg px-4 py-3 mb-6 text-sm">
+                    {{ $errors->first() }}
+                </div>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
+
+                <div>
+                    <label class="block text-sm text-slate-400 mb-1">Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required
+                           class="w-full bg-slate-800 border border-slate-600 focus:border-indigo-500 rounded-lg px-4 py-3 text-white outline-none transition"/>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-slate-400 mb-1">Password</label>
+                    <input type="password" name="password" required
+                           class="w-full bg-slate-800 border border-slate-600 focus:border-indigo-500 rounded-lg px-4 py-3 text-white outline-none transition"/>
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center gap-2 text-slate-400">
+                        <input type="checkbox" name="remember" class="accent-indigo-500">
+                        Remember me
+                    </label>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-indigo-400 hover:underline">
+                            Forgot password?
+                        </a>
+                    @endif
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-lg transition">
+                    Log In
+                </button>
+            </form>
+
+            <p class="text-slate-500 text-sm text-center mt-6">
+                Don't have an account?
+                <a href="{{ route('register') }}" class="text-indigo-400 hover:underline">Register</a>
+            </p>
         </div>
-    </form>
-</x-guest-layout>
+    </div>
+
+</body>
+</html>
